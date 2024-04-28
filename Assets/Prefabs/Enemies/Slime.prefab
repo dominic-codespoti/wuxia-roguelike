@@ -159,7 +159,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &5248268500262938268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,9 +172,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38391b911839b1449aaac419de597f07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExperienceOrbPrefab: {fileID: 8159019833764494403, guid: 7b50d4db055ef0a4287522ded0178b25, type: 3}
-  TotalHealth: 10
-  Experience: 10
+  <ExperienceOrbPrefab>k__BackingField: {fileID: 8159019833764494403, guid: 7b50d4db055ef0a4287522ded0178b25, type: 3}
+  <Experience>k__BackingField: 10
+  <MaxHealth>k__BackingField: 5
+  <CurrentHealth>k__BackingField: 0
+  <MovementSpeed>k__BackingField: 1
 --- !u!114 &666354706602798244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,4 +189,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47993d9f0bfebba4f80f8e7ad853ea0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthbarPrefab: {fileID: 3089043967015492593, guid: 18f9accc3508bc04e90507a8bcc9bf1d, type: 3}
+  <HealthBarPrefab>k__BackingField: {fileID: 3089043967015492593, guid: 18f9accc3508bc04e90507a8bcc9bf1d, type: 3}

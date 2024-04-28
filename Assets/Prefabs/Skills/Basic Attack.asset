@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac5f9112cbaab5e4db5cbc9cf69663ff, type: 3}
+  m_Name: Basic Attack
+  m_EditorClassIdentifier: 
+  Name: Basic Attack
+  Description: Fires off a ball of Ki.
+  ProjectilePrefab: {fileID: 666621211097344798, guid: 65bf2d2bc84a56642a8b2f6aa15ec90d, type: 3}
+  EffectPrefab: {fileID: 0}
+  Cooldown: 0.2
+  Damage: 2
+  Image: {fileID: 0}

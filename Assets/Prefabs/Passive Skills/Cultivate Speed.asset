@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7458119bbecd1b149b8a4f44fffabb39, type: 3}
+  m_Name: Cultivate Speed
+  m_EditorClassIdentifier: 
+  Name: Cultivate Speed
+  Description: Refine your legs and strengthen your dashing prowess, increasing your
+    dashes strength by {value}.
+  EffectorType: 0
+  EffectType: 0
+  Image: {fileID: 21300000, guid: 34cf94996c5103c4ca7f81bb7e4e0741, type: 3}
+  Rank: 0
+  Values: 050000000a0000000f000000
+  Rarity: 0

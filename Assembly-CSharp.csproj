@@ -59,21 +59,42 @@
     <UnityVersion>2022.3.25f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="C:\Users\domco\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.0.1\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="E:\UnityHubs\2022.3.25f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="E:\UnityHubs\2022.3.25f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Enemy\EnemySpawner.cs" />
-    <Compile Include="Assets\Scripts\Display.cs" />
+    <Compile Include="Assets\Scripts\UI\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Combat\Projectile.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerLevelStages.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
     <Compile Include="Assets\Scripts\Utilities\Maybe.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAttackController.cs" />
+    <Compile Include="Assets\Scripts\Effects\Hit.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyHealthbar.cs" />
+    <Compile Include="Assets\Scripts\Utilities\PrimitiveExtensions.cs" />
+    <Compile Include="Assets\Scripts\Combat\Skill.cs" />
     <Compile Include="Assets\Scripts\Enemy\ExperienceOrb.cs" />
+    <Compile Include="Assets\Scripts\Effects\Flash.cs" />
+    <Compile Include="Assets\Scripts\Combat\PassiveSkill.cs" />
+    <Compile Include="Assets\Scripts\UI\PopupScreen.cs" />
+    <Compile Include="Assets\Scripts\Combat\SkillRarity.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
+    <Compile Include="Assets\Scripts\Effects\Bob.cs" />
+    <Compile Include="Assets\Scripts\UI\LevelupScreen.cs" />
+    <Compile Include="Assets\Scripts\UI\Hud.cs" />
+    <Compile Include="Assets\Scripts\Effects\CameraShake.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerPassiveSkillController.cs" />
+    <Compile Include="Assets\Scripts\Events\PlayerEvents.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IDamageable.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\UI\StartScreen.uxml" />
+    <None Include="Assets\UI\HUD.uxml" />
+    <None Include="Assets\UI\LevelUpScreen.uxml" />
+    <None Include="Assets\UI\LevelUpStyles.uss" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

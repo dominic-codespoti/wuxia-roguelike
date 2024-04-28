@@ -5,35 +5,51 @@ using UnityEngine;
 /// </summary>
 class EnemySpawner : MonoBehaviour
 {
-  public GameObject[] enemyPrefabs;
+    [field: SerializeField] public GameObject[] EnemyPrefabs { get; private set; }
 
-  [Range(0, 100)]
-  public float spawnRate = 1;
+    [field: Range(0, 100)]
+    [field: SerializeField] public float SpawnRate { get; private set; } = 1;
 
-  [Range(0, 100)]
-  public float spawnChance = 50;
+    [field: Range(0, 100)]
+    [field: SerializeField] public float SpawnChance { get; private set; } = 50;
 
-  [Range(0, 100)]
-  public float spawnRadius = 5;
+    [field: Range(0, 100)]
+    [field: SerializeField] public float SpawnRadius { get; private set; } = 5;
+    [field: SerializeField] public float FrequencyIncreaseRate { get; private set; } = 0.1f;
+    [field: SerializeField] public float FrequencyMultiplier { get; private set; } = 1.1f;
+    [field: SerializeField] public float EnemyLevelIncreaseRate { get; private set; } = 0.2f;
+    [field: SerializeField] public int StartingEnemyLevel { get; private set; } = 1;
 
-  public void Start()
-  {
-    InvokeRepeating("SpawnEnemy", 0, spawnRate);
-  }
+    private float elapsedTime = 0f;
 
-  public void SpawnEnemy()
-  {
-    if (Random.Range(0, 100) < spawnChance)
+    public void Start()
     {
-      var enemyPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
-      var spawnPosition = transform.position + Random.insideUnitSphere * spawnRadius;
-      Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        InvokeRepeating(nameof(SpawnEnemy), 0, SpawnRate);
     }
-  }
 
-  public void OnDrawGizmosSelected()
-  {
-    Gizmos.color = Color.red;
-    Gizmos.DrawWireSphere(transform.position, spawnRadius);
-  }
+    public void SpawnEnemy()
+    {
+        elapsedTime += Time.deltaTime;
+
+        float currentSpawnRate = SpawnRate / Mathf.Pow(FrequencyMultiplier, elapsedTime * FrequencyIncreaseRate);
+
+        if (Random.Range(0, 100) < SpawnChance)
+        {
+            var enemyPrefab = EnemyPrefabs[Random.Range(0, EnemyPrefabs.Length)];
+            var spawnPosition = transform.position + Random.insideUnitSphere * SpawnRadius;
+
+            int enemyLevel = (int)(StartingEnemyLevel + elapsedTime * EnemyLevelIncreaseRate);
+
+            var enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+            enemy.GetComponent<Enemy>().SetLevel(enemyLevel);
+        }
+
+        Invoke(nameof(SpawnEnemy), currentSpawnRate);
+    }
+
+    public void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, SpawnRadius);
+    }
 }

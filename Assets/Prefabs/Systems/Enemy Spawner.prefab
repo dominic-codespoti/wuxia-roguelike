@@ -44,8 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86b3c74353f8ba64c8fb8c803d13483c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefabs:
+  <EnemyPrefabs>k__BackingField:
   - {fileID: 535796547107786855, guid: c42fd89a174f7644bab54c24b77aaeba, type: 3}
-  spawnRate: 1
-  spawnChance: 24.1
-  spawnRadius: 2.6
+  <SpawnRate>k__BackingField: 1
+  <SpawnChance>k__BackingField: 50
+  <SpawnRadius>k__BackingField: 5
+  <FrequencyIncreaseRate>k__BackingField: 0.0001
+  <FrequencyMultiplier>k__BackingField: 1.1
+  <EnemyLevelIncreaseRate>k__BackingField: 0.2
+  <StartingEnemyLevel>k__BackingField: 1

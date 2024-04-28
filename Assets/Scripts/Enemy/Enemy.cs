@@ -3,31 +3,64 @@ using UnityEngine;
 /// <summary>
 /// A 2D enemy, which follows the player.
 /// </summary>
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(Hit))]
 class Enemy : MonoBehaviour, IDamageable
 {
-  public GameObject ExperienceOrbPrefab;
-  public int TotalHealth = 10;
-  public int Experience = 10;
+    [field: SerializeField] public GameObject ExperienceOrbPrefab { get; private set; }
+    [field: SerializeField] public int Experience { get; private set; }
+    [field: SerializeField] public int MaxHealth { get; private set; }
+    [field: SerializeField] public int CurrentHealth { get; private set; }
+    [field: SerializeField] public int MovementSpeed { get; private set; }
 
-  public int MaxHealth { get; private set; }
-  public int CurrentHealth { get; private set; }
+    private Player _player;
+    private Rigidbody2D _rigidbody;
+    private Hit _hitEffect;
 
-  public void Start()
-  {
-    MaxHealth = TotalHealth;
-    CurrentHealth = MaxHealth;
-  }
-
-  public void TakeDamage(int damage)
-  {
-    CurrentHealth -= damage;
-    if (CurrentHealth <= 0)
+    public void Start()
     {
-      var orb = Instantiate(ExperienceOrbPrefab, transform.position, Quaternion.identity);
-      orb.GetComponent<ExperienceOrb>().Experience = Experience;
+        CurrentHealth = MaxHealth;
 
-      Destroy(gameObject);
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _player = FindObjectOfType<Player>();
+        _hitEffect = GetComponent<Hit>();
     }
-  }
+
+    public void Update()
+    {
+        var direction = _player.transform.position - transform.position;
+        var velocity = direction.normalized * MovementSpeed;
+        _rigidbody.velocity = velocity;
+    }
+
+    public void SetLevel(int level)
+    {
+        Experience = level * 10;
+        MaxHealth = level * 10;
+        CurrentHealth = MaxHealth;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        _hitEffect.Play();
+
+        CurrentHealth -= damage;
+        if (CurrentHealth <= 0)
+        {
+            var orb = Instantiate(ExperienceOrbPrefab, transform.position, Quaternion.identity);
+            orb.GetComponent<ExperienceOrb>().SetExperience(Experience);
+
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!collision.gameObject.CompareTag("Player"))
+        {
+            return;
+        }
+
+        IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
+        damageable?.TakeDamage(1);
+    }
 }

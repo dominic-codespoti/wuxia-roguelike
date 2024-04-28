@@ -6,32 +6,69 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class Projectile : MonoBehaviour
 {
-  public float speed = 10f;
-  public float lifetime = 2f;
+    [field: SerializeField] public float Speed { get; private set; } = 10f;
+    [field: SerializeField] public float Lifetime { get; private set; } = 2f;
+    [field: SerializeField] public OnHitEffect Effect { get; private set; } = OnHitEffect.None;
+    [field: SerializeField] public float EffectValue { get; private set; } = 2;
+    [field: SerializeField] public GameObject EffectPrefab { get; private set; }
 
-  private void Start()
-  {
-    Destroy(gameObject, lifetime);
-  }
+    private int _damage;
 
-  private void Update()
-  {
-    transform.Translate(Vector3.up * speed * Time.deltaTime);
-  }
-
-  private void OnCollisionEnter2D(Collision2D collision)
-  {
-    if (collision.gameObject.CompareTag("Player"))
+    public void SetDamage(int damage)
     {
-      return;
+        _damage = damage;
     }
 
-    IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
-    if (damageable != null)
+    public void Start()
     {
-      damageable.TakeDamage(1);
+        Destroy(gameObject, Lifetime);
     }
 
-    Destroy(gameObject);
-  }
+    public void Update()
+    {
+        transform.Translate(Vector3.up * Speed * Time.deltaTime);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            return;
+        }
+
+        IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
+
+        switch (Effect)
+        {
+            case OnHitEffect.None:
+                damageable?.TakeDamage(_damage);
+                Destroy(gameObject);
+                break;
+            case OnHitEffect.Pierce:
+                damageable?.TakeDamage(_damage);
+                break;
+            case OnHitEffect.Explode:
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, EffectValue);
+                foreach (Collider2D collider in colliders)
+                {
+                    IDamageable otherDamageable = collider.GetComponent<IDamageable>();
+                    otherDamageable?.TakeDamage(_damage);
+                }
+
+                GameObject explosionEffect = Instantiate(EffectPrefab, transform.position, Quaternion.identity);
+                Animator animator = explosionEffect.GetComponent<Animator>();
+                animator.Play("Explosion");
+
+                Destroy(gameObject);
+
+                break;
+        }
+    }
+}
+
+public enum OnHitEffect
+{
+    None,
+    Pierce,
+    Explode
 }

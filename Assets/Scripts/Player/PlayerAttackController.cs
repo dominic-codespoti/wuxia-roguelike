@@ -1,86 +1,98 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// A 2D player attack controller.
 /// </summary>
 public class PlayerAttackController : MonoBehaviour
 {
-  [Header("Default Projectile")]
-  public GameObject DefaultProjectilePrefab;
-  public GameObject DefaultEffectPrefab;
-  public List<Skill> Skills;
-  public BoxCollider2D Origin;
+    [field: SerializeField] public List<Skill> Skills { get; private set; }
+    [field: SerializeField] public int Attack { get; private set; }
+    [field: SerializeField] public BoxCollider2D Origin { get; private set; }
 
-  private Skill _currentSkill;
-  private float _currentCooldown;
-  private Camera _mainCamera;
+    private Skill _currentSkill;
+    private float _currentCooldown;
+    private Maybe<Skill> _currentSecondarySkill;
+    private float _currentSecondaryCooldown;
+    private Camera _mainCamera;
+    private Player _player;
+    private int _additionalShots;
 
-  private void Start()
-  {
-    _currentSkill = new Skill
+    public void Start()
     {
-      name = "Default Attack",
-      projectilePrefab = DefaultProjectilePrefab,
-      cooldown = 0.5f,
-      effectPrefab = DefaultEffectPrefab
-    };
-
-    _mainCamera = Camera.main;
-  }
-
-  private void Update()
-  {
-    // Handle skill selection (e.g., using number keys)
-    for (int i = 0; i < Skills.Count; i++)
-    {
-      if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-      {
-        SelectSkill(Skills[i]);
-      }
+        _mainCamera = Camera.main;
+        _player = GetComponent<Player>();
+        _currentSkill = Skills[0];
+        _currentSecondarySkill = Maybe<Skill>.None;
+        _additionalShots = 0;
     }
 
-    // Decrement the cooldown timer
-    if (_currentCooldown > 0)
+    public void Update()
     {
-      _currentCooldown -= Time.deltaTime;
+        // Main
+        if (_currentCooldown > 0)
+        {
+            _currentCooldown -= Time.deltaTime;
+        }
+
+        if (Input.GetMouseButtonDown(0) && _currentCooldown <= 0)
+        {
+            ShootProjectile();
+            _currentCooldown = _currentSkill.Cooldown;
+        }
+
+        // Secondary
+        if (_currentSecondaryCooldown > 0)
+        {
+            _currentSecondaryCooldown -= Time.deltaTime;
+        }
+
+        if (Input.GetMouseButtonDown(1) && _currentSecondaryCooldown <= 0)
+        {
+            ShootProjectile(true);
+            _currentSecondaryCooldown = _currentSecondarySkill.Map(skill => skill.Cooldown).Value;
+        }
     }
 
-    // Check if the player wants to attack and the current skill is not on cooldown
-    if (Input.GetMouseButtonDown(0) && _currentCooldown <= 0)
+    public void BuffAttack(int attack)
     {
-      ShootProjectile();
-      _currentCooldown = _currentSkill.cooldown;
+        Attack += attack;
     }
-  }
 
-  private void SelectSkill(Skill skill)
-  {
-    _currentSkill = skill;
-  }
+    public void AddProjectileToAttacks()
+    {
+        _additionalShots++;
+    }
 
-  private void ShootProjectile()
-  {
-    // Get the mouse position in world coordinates
-    Vector3 mousePosition = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
-    mousePosition.z = 0f; // Set the z-coordinate to 0 for 2D
+    public void LearnSkill(Skill skill)
+    {
+        Skills.Add(skill);
+        _currentSecondarySkill = skill;
+    }
 
-    // Calculate the direction from the mouse position to the player
-    Vector3 direction = (mousePosition - transform.position).normalized;
+    private void ShootProjectile(bool isSecondary = false)
+    {
+        Vector3 mousePosition = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0f;
 
-    // Instantiate the projectile at the player's position, slightly ahead, and rotate it to face the cursor
-    var startingPosition = Origin.bounds.center;
-    var position = startingPosition + direction * 0.2f;
-    GameObject projectile = Instantiate(_currentSkill.projectilePrefab, position, Quaternion.identity);
-    projectile.transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
-  }
-}
+        Vector3 direction = (mousePosition - transform.position).normalized;
 
-[System.Serializable]
-public class Skill
-{
-  public string name;
-  public GameObject projectilePrefab;
-  public GameObject effectPrefab;
-  public float cooldown;
+        var skill = isSecondary ? _currentSecondarySkill.GetValueOrDefault(null) : _currentSkill;
+        if (skill == null)
+        {
+            return;
+        }
+
+        var startingPosition = Origin.bounds.center;
+        var position = startingPosition + direction * 0.2f;
+        var shots = _additionalShots + skill.ShotCount;
+
+        for (int i = 0; i <= shots; i++)
+        {
+            var pos = position + direction * i * 0.2f;
+            Projectile projectile = Instantiate(skill.ProjectilePrefab, pos, Quaternion.identity);
+            projectile.transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
+            projectile.SetDamage(skill.Damage + Attack);
+        }
+    }
 }

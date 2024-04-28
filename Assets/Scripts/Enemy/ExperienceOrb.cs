@@ -6,7 +6,12 @@ using UnityEngine;
 [RequireComponent(typeof(CircleCollider2D))]
 class ExperienceOrb : MonoBehaviour
 {
-  public int Experience = 10;
+  [field: SerializeField] public int Experience { get; private set; } = 10;
+
+  public void SetExperience(int experience)
+  {
+    Experience = experience;
+  }
 
   public void OnCollisionEnter2D(Collision2D other)
   {
