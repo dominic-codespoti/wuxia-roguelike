@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; justify-content: center; align-items: center;">
+        <ui:Label tabindex="-1" text="The Roguelike" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" style="-unity-font: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=25af0e69a0be3db47b27fa1051442d06&amp;type=3#NotInter-Regular&quot;); font-size: 32px; -unity-font-style: bold; -unity-text-align: upper-left; letter-spacing: 20px; margin-bottom: 24px;" />
+        <ui:Button text="Start Game" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StartButton" style="-unity-text-align: middle-center; white-space: normal; height: 43px; width: 193px; justify-content: flex-start; align-items: stretch;" />
+        <ui:Button text="Exit Game" parse-escape-sequences="true" display-tooltip-when-elided="true" name="QuitButton" style="-unity-text-align: middle-center; white-space: normal; height: 43px; width: 193px; justify-content: flex-start; align-items: stretch;" />
+    </ui:VisualElement>
+</ui:UXML>
