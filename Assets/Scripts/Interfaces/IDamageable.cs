@@ -1,20 +1,25 @@
-/// <summary>
-/// Interface for objects that can take damage.
-/// </summary>
-internal interface IDamageable
+using UnityEngine;
+
+namespace Interfaces
 {
   /// <summary>
-  /// The amount of damage the object can take.
+  /// Interface for objects that can take damage.
   /// </summary>
-  int MaxHealth { get; }
+  internal interface IDamageable
+  {
+    /// <summary>
+    /// The amount of damage the object can take.
+    /// </summary>
+    int MaxHealth { get; }
 
-  /// <summary>
-  /// The current health of the object.
-  /// </summary>
-  int CurrentHealth { get; }
+    /// <summary>
+    /// The current health of the object.
+    /// </summary>
+    int CurrentHealth { get; }
 
-  /// <summary>
-  /// The object takes damage.
-  /// </summary>
-  void TakeDamage(int damage);
+    /// <summary>
+    /// The object takes damage.
+    /// </summary>
+    void TakeDamage(int damage, Vector2 impact);
+  }
 }

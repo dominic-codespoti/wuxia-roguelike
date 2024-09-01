@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Basic Attack
   Description: Fires off a ball of Ki.
-  ProjectilePrefab: {fileID: 666621211097344798, guid: 65bf2d2bc84a56642a8b2f6aa15ec90d, type: 3}
+  AttackPrefab: {fileID: 666621211097344798, guid: 65bf2d2bc84a56642a8b2f6aa15ec90d, type: 3}
   EffectPrefab: {fileID: 0}
   Cooldown: 0.2
   Damage: 2
   Image: {fileID: 0}
+  ShotCount: 1
+  Rarity: 0

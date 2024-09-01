@@ -1,92 +1,99 @@
 using System.Collections.Generic;
+using Combat;
 using UnityEngine;
 
-public class PlayerPassiveSkillController : MonoBehaviour
+namespace Player
 {
-    [SerializeField] public List<PassiveSkill> Skills;
-
-    private Player _player;
-    private PlayerAttackController _playerAttackController;
-    private PlayerController _playerController;
-
-    public void Start()
+    public class PlayerPassiveSkillController : MonoBehaviour
     {
-        _player = GetComponent<Player>();
-        _playerAttackController = GetComponent<PlayerAttackController>();
-        _playerController = GetComponent<PlayerController>();
-    }
+        [SerializeField] public List<PassiveSkill> Skills;
 
-    public void LearnSkill(PassiveSkill skill)
-    {
-        Skills.Add(skill);
+        private Player _player;
+        private PlayerAttackController _playerAttackController;
+        private PlayerController _playerController;
 
-        Apply(skill);
-    }
-
-    private void Apply(PassiveSkill skill)
-    {
-        switch (skill.EffectorType)
+        public void Start()
         {
-            case EffectorType.Dash:
-                ApplyDash(skill);
-                break;
-            case EffectorType.Attack:
-                ApplyAttack(skill);
-                break;
-            case EffectorType.Health:
-                ApplyHealth(skill);
-                break;
+            _player = GetComponent<Player>();
+            _playerAttackController = GetComponent<PlayerAttackController>();
+            _playerController = GetComponent<PlayerController>();
         }
-    }
 
-    private void ApplyHealth(PassiveSkill skill)
-    {
-        switch (skill.EffectType)
+        public void LearnSkill(PassiveSkill skill)
         {
-            case EffectType.Increase:
-                _player.BuffHealth((int)skill.Value);
-                break;
-            case EffectType.Decrease:
-                _player.BuffHealth((int)-skill.Value);
-                break;
-            case EffectType.Multiply:
-                _player.BuffHealth((int)(skill.Value * _player.MaxHealth));
-                break;
+            Skills.Add(skill);
+
+            Apply(skill);
         }
-    }
 
-    private void ApplyAttack(PassiveSkill skill)
-    {
-        switch (skill.EffectType)
+        private void Apply(PassiveSkill skill)
         {
-            case EffectType.Increase:
-                _playerAttackController.BuffAttack((int)skill.Value);
-                break;
-            case EffectType.Decrease:
-                _playerAttackController.BuffAttack((int)-skill.Value);
-                break;
-            case EffectType.Multiply:
-                _playerAttackController.BuffAttack((int)(skill.Value * _playerAttackController.Attack));
-                break;
-            case EffectType.IncreaseCount:
-                _playerAttackController.AddProjectileToAttacks();
-                break;
+            switch (skill.EffectorType)
+            {
+                case EffectorType.Dash:
+                    ApplyDash(skill);
+                    break;
+                case EffectorType.Attack:
+                    ApplyAttack(skill);
+                    break;
+                case EffectorType.Health:
+                    ApplyHealth(skill);
+                    break;
+            }
         }
-    }
 
-    private void ApplyDash(PassiveSkill skill)
-    {
-        switch (skill.EffectType)
+        private void ApplyHealth(PassiveSkill skill)
         {
-            case EffectType.Increase:
-                _playerController.BuffDashForce((int)skill.Value);
-                break;
-            case EffectType.Decrease:
-                _playerController.BuffDashForce((int)-skill.Value);
-                break;
-            case EffectType.Multiply:
-                _playerController.BuffDashForce((int)(skill.Value * _playerController.DashForce));
-                break;
+            switch (skill.EffectType)
+            {
+                case EffectType.Increase:
+                    _player.BuffHealth((int)skill.Value);
+                    break;
+                case EffectType.Decrease:
+                    _player.BuffHealth((int)-skill.Value);
+                    break;
+                case EffectType.Multiply:
+                    _player.BuffHealth((int)(skill.Value * _player.MaxHealth));
+                    break;
+            }
+        }
+
+        private void ApplyAttack(PassiveSkill skill)
+        {
+            switch (skill.EffectType)
+            {
+                case EffectType.Increase:
+                    _playerAttackController.BuffAttack((int)skill.Value);
+                    break;
+                case EffectType.Decrease:
+                    _playerAttackController.BuffAttack((int)-skill.Value);
+                    break;
+                case EffectType.Multiply:
+                    _playerAttackController.BuffAttack((int)(skill.Value * _playerAttackController.Attack));
+                    break;
+                case EffectType.IncreaseCount:
+                    _playerAttackController.AddProjectileToAttacks();
+                    break;
+                case EffectType.CriticalChance:
+                    _playerAttackController.BuffCriticalChance(skill.Value);
+                    break;
+            }
+        }
+
+        private void ApplyDash(PassiveSkill skill)
+        {
+            switch (skill.EffectType)
+            {
+                case EffectType.Increase:
+                    _playerController.BuffDashForce((int)skill.Value);
+                    break;
+                case EffectType.Decrease:
+                    _playerController.BuffDashForce((int)-skill.Value);
+                    break;
+                case EffectType.Multiply:
+                    _playerController.BuffDashForce((int)(skill.Value * _playerController.DashForce));
+                    break;
+            }
         }
     }
 }

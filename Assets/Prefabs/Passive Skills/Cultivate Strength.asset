@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Cultivate Strength
   m_EditorClassIdentifier: 
   Name: Cultivate Strength
-  Description: Refine your body and strengthen your attacks by {value}.
+  Description: Boost your damage by {value}.
   EffectorType: 1
   EffectType: 0
   Image: {fileID: 21300000, guid: 33faf519a1f096f4ca58df19ac9e02e1, type: 3}

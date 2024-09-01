@@ -1,133 +1,131 @@
+using Combat;
+using Interfaces;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using Utilities;
 
-/// <summary>
-/// The player class, which contains all the player's data and functions.
-/// </summary>
-public class Player : MonoBehaviour, IDamageable
+namespace Player
 {
-    [field: SerializeField] public int MaxHealth { get; private set; }
-    [field: SerializeField] public int CurrentHealth { get; private set; }
-    [field: SerializeField] public int Experience { get; private set; }
-
-    public CulitvationStage CultivationStage { get; private set; }
-    public CultivationRealm CultivationRealm { get; private set; }
-
-    private Camera _camera;
-    private PlayerAttackController _playerAttackController;
-    private PlayerController _playerController;
-    private PlayerPassiveSkillController _playerPassiveSkillController;
-
-    public void Start()
+    /// <summary>
+    /// The player class, which contains all the player's data and functions.
+    /// </summary>
+    public class Player : MonoBehaviour, IDamageable
     {
-        CultivationStage = CulitvationStage.First;
-        CultivationRealm = CultivationRealm.BodyRefinement;
-        Experience = 0;
-        CurrentHealth = MaxHealth;
+        [field: SerializeField] public int MaxHealth { get; private set; }
+        [field: SerializeField] public int CurrentHealth { get; private set; }
+        [field: SerializeField] public int Experience { get; private set; }
+        [field: SerializeField] public CulitvationStage CultivationStage { get; private set; }
+        [field: SerializeField] public CultivationRealm CultivationRealm { get; private set; }
 
-        _camera = Camera.main;
-        _playerController = GetComponent<PlayerController>();
-        _playerAttackController = GetComponent<PlayerAttackController>();
-        _playerPassiveSkillController = GetComponent<PlayerPassiveSkillController>();
-    }
+        private Camera _camera;
+        private PlayerAttackController _playerAttackController;
+        private PlayerController _playerController;
+        private PlayerPassiveSkillController _playerPassiveSkillController;
 
-    public void BuffHealth(int health)
-    {
-        CurrentHealth += health;
-        MaxHealth += health;
-    }
-
-    public void GainExperience(int amount)
-    {
-        Experience += amount;
-
-        while (true)
+        public void Start()
         {
-            if (Experience >= PlayerLevelStages.StageExperienceThresholds[CultivationStage])
+            EventBus.Subscribe<Events.SkillLearned>((evt) => LearnSkill(evt.Skill));
+            EventBus.Subscribe<Events.PassiveSkillLearned>((evt) => LearnPassiveSkill(evt.PassiveSkill));
+
+            CultivationStage = CulitvationStage.First;
+            CultivationRealm = CultivationRealm.BodyRefinement;
+            Experience = 0;
+            CurrentHealth = MaxHealth;
+
+            _camera = Camera.main;
+            _playerController = GetComponent<PlayerController>();
+            _playerAttackController = GetComponent<PlayerAttackController>();
+            _playerPassiveSkillController = GetComponent<PlayerPassiveSkillController>();
+        }
+
+        public void BuffHealth(int health)
+        {
+            CurrentHealth += health;
+            MaxHealth += health;
+        }
+
+        public void GainExperience(int amount)
+        {
+            Experience += amount;
+
+            while (true)
             {
-                if (CultivationStage == CulitvationStage.Third)
+                if (Experience >= PlayerLevelStages.StageExperienceThresholds[CultivationStage])
                 {
-                    if (CultivationRealm < CultivationRealm.ImmortalAscension && Experience >= PlayerLevelStages.RealmExperienceThresholds[CultivationRealm])
+                    if (CultivationStage == CulitvationStage.Third)
                     {
-                        AdvanceCultivationRealm();
+                        if (CultivationRealm < CultivationRealm.ImmortalAscension && Experience >= PlayerLevelStages.RealmExperienceThresholds[CultivationRealm])
+                        {
+                            AdvanceCultivationRealm();
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                     else
                     {
-                        break;
+                        AdvanceCultivationStage();
                     }
                 }
                 else
                 {
-                    AdvanceCultivationStage();
+                    break;
                 }
             }
-            else
+        }
+
+        public Maybe<Skill> GetSkill(string name)
+        {
+            var skill = _playerAttackController.Skills.Find(skill => skill.Name == name);
+            return skill != null ? skill : Maybe<Skill>.None;
+        }
+
+        public Maybe<PassiveSkill> GetPassiveSkill(string name)
+        {
+            var skill = _playerPassiveSkillController.Skills.Find(skill => skill.Name == name);
+            return skill != null ? skill : Maybe<PassiveSkill>.None;
+        }
+
+        public void TakeDamage(int damage, Vector2 impact)
+        {
+            EventBus.Publish(new Events.PlayerDamaged(this, damage, impact));
+
+            CurrentHealth -= damage;
+            if (CurrentHealth <= 0)
             {
-                break;
+                EventBus.Publish(new Events.PlayerDied(this));
             }
         }
-    }
 
-    public void LearnSkill(Skill skill)
-    {
-        _playerAttackController.LearnSkill(skill);
-    }
-
-    public void LearnPassiveSkill(PassiveSkill skill)
-    {
-        _playerPassiveSkillController.LearnSkill(skill);
-    }
-
-    public Maybe<Skill> GetSkill(string name)
-    {
-        var skill = _playerAttackController.Skills.Find(skill => skill.Name == name);
-        return skill != null ? skill : Maybe<Skill>.None;
-    }
-
-    public Maybe<PassiveSkill> GetPassiveSkill(string name)
-    {
-        var skill = _playerPassiveSkillController.Skills.Find(skill => skill.Name == name);
-        return skill != null ? skill : Maybe<PassiveSkill>.None;
-    }
-
-    public void TakeDamage(int damage)
-    {
-        // Flash red and shake the camera
-        var renderer = GetComponent<SpriteRenderer>();
-        renderer.color = Color.red;
-        Invoke(nameof(ResetColor), 0.1f);
-        _camera.GetComponent<CameraShake>().Shake(0.1f, 0.1f);
-
-        // Take damage
-        CurrentHealth -= damage;
-        if (CurrentHealth <= 0)
+        private void LearnSkill(Skill skill)
         {
-            Die();
+            _playerAttackController.LearnSkill(skill);
         }
-    }
 
-    private void AdvanceCultivationStage()
-    {
-        CultivationStage++;
-        Experience -= PlayerLevelStages.StageExperienceThresholds[CultivationStage];
-        PlayerEvents.PlayerLeveledUp(this);
-    }
+        private void LearnPassiveSkill(PassiveSkill skill)
+        {
+            _playerPassiveSkillController.LearnSkill(skill);
+        }
 
-    private void AdvanceCultivationRealm()
-    {
-        CultivationRealm++;
-        CultivationStage = CulitvationStage.First;
-        Experience -= PlayerLevelStages.RealmExperienceThresholds[CultivationRealm];
-        PlayerEvents.PlayerLeveledUp(this);
-    }
+        private void AdvanceCultivationStage()
+        {
+            CultivationStage++;
+            Experience = 0;
+            MaxHealth += 2;
+            CurrentHealth = MaxHealth;
 
-    private void Die()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
+            EventBus.Publish(new Events.PlayerLeveledUp(this));
+        }
 
-    private void ResetColor()
-    {
-        GetComponent<SpriteRenderer>().color = Color.white;
+        private void AdvanceCultivationRealm()
+        {
+            CultivationRealm++;
+            CultivationStage = CulitvationStage.First;
+            Experience = 0;
+            MaxHealth += 10;
+            CurrentHealth = MaxHealth;
+
+            EventBus.Publish(new Events.PlayerLeveledUp(this));
+        }
     }
 }

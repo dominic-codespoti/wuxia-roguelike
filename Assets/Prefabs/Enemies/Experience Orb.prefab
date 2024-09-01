@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5088173374508272020}
   - component: {fileID: 7745683314378345703}
-  - component: {fileID: -6785060941014918059}
   - component: {fileID: 143279326547270890}
+  - component: {fileID: -6785060941014918059}
   - component: {fileID: -8501776617670958273}
+  - component: {fileID: 626624634480384240}
   m_Layer: 0
   m_Name: Experience Orb
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 8159019833764494403}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3302773, y: -0.030909784, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -87,19 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-6785060941014918059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8159019833764494403}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd54e6866ee17564a8bf597354b5f809, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Experience>k__BackingField: 10
 --- !u!58 &143279326547270890
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -135,6 +123,19 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &-6785060941014918059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8159019833764494403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd54e6866ee17564a8bf597354b5f809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Experience>k__BackingField: 10
 --- !u!114 &-8501776617670958273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,5 +148,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba63f9d69f890614888a85d864ce12a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <bobSpeed>k__BackingField: 1
-  <bobHeight>k__BackingField: 0.1
+  <minFloatSpeed>k__BackingField: 0.75
+  <maxFloatSpeed>k__BackingField: 1
+  <floatHeight>k__BackingField: 0.05
+  <pickupRange>k__BackingField: 0.3
+  <pickupSpeed>k__BackingField: 10
+--- !u!114 &626624634480384240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8159019833764494403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e79fa0afab15a674d9ecb97bff292a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shadowOffset: {x: 0, y: -0.8}
+  shadowColor: {r: 0, g: 0, b: 0, a: 0.5}
+  maxShadowHeight: 40
+  maxShadowWidth: 40
+  minShadowScale: 0.5

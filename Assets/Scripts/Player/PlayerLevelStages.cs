@@ -1,40 +1,43 @@
 using System.Collections.Generic;
 
-public static class PlayerLevelStages
+namespace Player
 {
-    public static readonly Dictionary<CultivationRealm, int> RealmExperienceThresholds = new Dictionary<CultivationRealm, int>
+    public static class PlayerLevelStages
     {
-        { CultivationRealm.BodyRefinement, 100 },
-        { CultivationRealm.QiCondensation, 200 },
-        { CultivationRealm.FoundationBuilding, 400 },
-        { CultivationRealm.CoreFormation, 800 },
-        { CultivationRealm.NascentSoul, 1600 },
-        { CultivationRealm.SpiritTransformation, 3200 },
-        { CultivationRealm.ImmortalAscension, 6400 }
-    };
+        public static readonly Dictionary<CultivationRealm, int> RealmExperienceThresholds = new Dictionary<CultivationRealm, int>
+        {
+            { CultivationRealm.BodyRefinement, 100 },
+            { CultivationRealm.QiCondensation, 500 },
+            { CultivationRealm.FoundationBuilding, 1000 },
+            { CultivationRealm.CoreFormation, 2500 },
+            { CultivationRealm.NascentSoul, 5000 },
+            { CultivationRealm.SpiritTransformation, 10000 },
+            { CultivationRealm.ImmortalAscension, 100000 }
+        };
 
-    public static readonly Dictionary<CulitvationStage, int> StageExperienceThresholds = new Dictionary<CulitvationStage, int>
+        public static readonly Dictionary<CulitvationStage, int> StageExperienceThresholds = new Dictionary<CulitvationStage, int>
+        {
+            { CulitvationStage.First, 50 },
+            { CulitvationStage.Second, 100 },
+            { CulitvationStage.Third, 150 }
+        };
+    }
+
+    public enum CultivationRealm
     {
-        { CulitvationStage.First, 50 },
-        { CulitvationStage.Second, 100 },
-        { CulitvationStage.Third, 150 }
-    };
-}
+        BodyRefinement,
+        QiCondensation,
+        FoundationBuilding,
+        CoreFormation,
+        NascentSoul,
+        SpiritTransformation,
+        ImmortalAscension
+    }
 
-public enum CultivationRealm
-{
-    BodyRefinement,
-    QiCondensation,
-    FoundationBuilding,
-    CoreFormation,
-    NascentSoul,
-    SpiritTransformation,
-    ImmortalAscension
-}
-
-public enum CulitvationStage
-{
-    First,
-    Second,
-    Third
+    public enum CulitvationStage
+    {
+        First,
+        Second,
+        Third
+    }
 }

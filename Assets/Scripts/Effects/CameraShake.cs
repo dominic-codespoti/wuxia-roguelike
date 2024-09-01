@@ -1,38 +1,42 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// A camera shake script that shakes the camera for a given duration and magnitude.
-/// </summary>
-class CameraShake : MonoBehaviour
+namespace Effects
 {
-    private Vector3 _initialLocalPosition;
-
-    public void Start()
+    /// <summary>
+    /// A camera shake script that shakes the camera for a given duration and magnitude.
+    /// </summary>
+    class CameraShake : MonoBehaviour
     {
-        _initialLocalPosition = transform.localPosition;
-    }
+        private Vector3 _initialLocalPosition;
 
-    public void Shake(float duration, float magnitude)
-    {
-        StartCoroutine(DoShake(duration, magnitude));
-    }
-
-    private IEnumerator DoShake(float duration, float magnitude)
-    {
-        var elapsed = 0f;
-
-        while (elapsed < duration)
+        public void Start()
         {
-            var x = Random.Range(-1f, 1f) * magnitude;
-            var y = Random.Range(-1f, 1f) * magnitude;
-
-            transform.localPosition = new Vector3(x, y, _initialLocalPosition.z);
-
-            elapsed += Time.deltaTime;
-            yield return null;
+            _initialLocalPosition = transform.localPosition;
+            EventBus.Subscribe<Events.PlayerDamaged>(evt => Shake(0.1f, 0.1f));
         }
 
-        transform.localPosition = _initialLocalPosition;
+        public void Shake(float duration, float magnitude)
+        {
+            StartCoroutine(DoShake(duration, magnitude));
+        }
+
+        private IEnumerator DoShake(float duration, float magnitude)
+        {
+            var elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                var x = Random.Range(-1f, 1f) * magnitude;
+                var y = Random.Range(-1f, 1f) * magnitude;
+
+                transform.localPosition = new Vector3(x, y, _initialLocalPosition.z);
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            transform.localPosition = _initialLocalPosition;
+        }
     }
 }

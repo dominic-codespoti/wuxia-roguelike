@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Cultivate Speed
   m_EditorClassIdentifier: 
   Name: Cultivate Speed
-  Description: Refine your legs and strengthen your dashing prowess, increasing your
-    dashes strength by {value}.
+  Description: Boost your dash by {value}.
   EffectorType: 0
   EffectType: 0
   Image: {fileID: 21300000, guid: 34cf94996c5103c4ca7f81bb7e4e0741, type: 3}

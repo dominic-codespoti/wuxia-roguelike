@@ -59,42 +59,75 @@
     <UnityVersion>2022.3.25f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Users\domco\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.0.1\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Users\domco\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.0.3\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="E:\UnityHubs\2022.3.25f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="E:\UnityHubs\2022.3.25f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Enemy\EnemySpawner.cs" />
-    <Compile Include="Assets\Scripts\UI\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\Effects\EnemyHitIndicator.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\IDynamicHeight.cs" />
+    <Compile Include="Assets\Scripts\Systems\EnemySpawner.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Combat\Projectile.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerLevelStages.cs" />
+    <Compile Include="Assets\Scripts\Effects\ShadowEmitter.cs" />
+    <Compile Include="Assets\Scripts\Combat\Attack.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
     <Compile Include="Assets\Scripts\Utilities\Maybe.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAttackController.cs" />
-    <Compile Include="Assets\Scripts\Effects\Hit.cs" />
+    <Compile Include="Assets\Scripts\Effects\PlayerHitIndicator.cs" />
+    <Compile Include="Assets\Scripts\Systems\GameController.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyHealthbar.cs" />
     <Compile Include="Assets\Scripts\Utilities\PrimitiveExtensions.cs" />
     <Compile Include="Assets\Scripts\Combat\Skill.cs" />
     <Compile Include="Assets\Scripts\Enemy\ExperienceOrb.cs" />
-    <Compile Include="Assets\Scripts\Effects\Flash.cs" />
+    <Compile Include="Assets\Scripts\Combat\Melee.cs" />
+    <Compile Include="Assets\Scripts\Systems\Teleporter.cs" />
+    <Compile Include="Assets\Scripts\Combat\Class.cs" />
     <Compile Include="Assets\Scripts\Combat\PassiveSkill.cs" />
-    <Compile Include="Assets\Scripts\UI\PopupScreen.cs" />
     <Compile Include="Assets\Scripts\Combat\SkillRarity.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
+    <Compile Include="Assets\Scripts\UI\Main Menu\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\Systems\CursorController.cs" />
+    <Compile Include="Assets\Scripts\UI\Game\LevelupScreen.cs" />
     <Compile Include="Assets\Scripts\Effects\Bob.cs" />
-    <Compile Include="Assets\Scripts\UI\LevelupScreen.cs" />
-    <Compile Include="Assets\Scripts\UI\Hud.cs" />
+    <Compile Include="Assets\Scripts\Systems\TextGenerator.cs" />
+    <Compile Include="Assets\Scripts\UI\Game\Hud.cs" />
     <Compile Include="Assets\Scripts\Effects\CameraShake.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerPassiveSkillController.cs" />
-    <Compile Include="Assets\Scripts\Events\PlayerEvents.cs" />
+    <Compile Include="Assets\Scripts\Events.cs" />
+    <Compile Include="Assets\Scripts\EventBus.cs" />
+    <Compile Include="Assets\Scripts\Combat\OnHitEffect.cs" />
+    <Compile Include="Assets\Scripts\UI\Game\PopupScreen.cs" />
+    <Compile Include="Assets\Scripts\Effects\DamageText.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IDamageable.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\UI\StartScreen.uxml" />
-    <None Include="Assets\UI\HUD.uxml" />
-    <None Include="Assets\UI\LevelUpScreen.uxml" />
-    <None Include="Assets\UI\LevelUpStyles.uss" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\UI\Main Menu\StartScreen.uxml" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+    <None Include="Assets\UI\Game\HUD.uxml" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+    <None Include="Assets\UI\Game\LevelUpScreen.uxml" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\UI\Game\LevelUpStyles.uss" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
+    <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

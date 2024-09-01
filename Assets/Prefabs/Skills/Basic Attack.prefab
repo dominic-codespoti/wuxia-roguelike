@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
+  m_LocalScale: {x: 0.039443597, y: 0.07123, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -96,6 +96,9 @@ MonoBehaviour:
   <Effect>k__BackingField: 0
   <EffectValue>k__BackingField: 2
   <EffectPrefab>k__BackingField: {fileID: 0}
+  <Damage>k__BackingField: 2
+  <IsCrit>k__BackingField: 0
+  <Aggressor>k__BackingField: Player
 --- !u!212 &2159450423967305623
 SpriteRenderer:
   m_ObjectHideFlags: 0

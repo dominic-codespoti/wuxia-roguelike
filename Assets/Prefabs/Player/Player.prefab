@@ -111,13 +111,13 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 0
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -167,6 +167,8 @@ GameObject:
   - component: {fileID: 6388312225369462321}
   - component: {fileID: -2110310069794491999}
   - component: {fileID: 70388780508269469}
+  - component: {fileID: 1632897695408415190}
+  - component: {fileID: 2447930437356104118}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -356,6 +358,7 @@ MonoBehaviour:
   <MovementState>k__BackingField: 0
   <Direction>k__BackingField: 0
   <DashDuration>k__BackingField: 0.2
+  <DashCooldown>k__BackingField: 1
 --- !u!114 &6388312225369462321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,7 +374,6 @@ MonoBehaviour:
   <Skills>k__BackingField:
   - {fileID: 11400000, guid: 814c7760e85dcbb4596d03604eaaaa81, type: 2}
   <Attack>k__BackingField: 0
-  <Origin>k__BackingField: {fileID: 301692655185418256}
 --- !u!114 &-2110310069794491999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387,6 +389,8 @@ MonoBehaviour:
   <MaxHealth>k__BackingField: 10
   <CurrentHealth>k__BackingField: 0
   <Experience>k__BackingField: 0
+  <CultivationStage>k__BackingField: 0
+  <CultivationRealm>k__BackingField: 0
 --- !u!114 &70388780508269469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,3 +404,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Skills: []
+--- !u!114 &1632897695408415190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8474592327802053303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc686fccecbe37c42a1d610a4e34fbfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _flashDuration: 0.5
+  _flashInterval: 0.1
+  _flashColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &2447930437356104118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8474592327802053303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e79fa0afab15a674d9ecb97bff292a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shadowOffset: {x: 0, y: -0.07}
+  shadowColor: {r: 0, g: 0, b: 0, a: 0.5882353}
+  maxShadowHeight: 3
+  maxShadowWidth: 8
+  minShadowScale: 0.2
