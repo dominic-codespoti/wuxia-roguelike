@@ -1,4 +1,4 @@
-using Interfaces;
+using Common.Interfaces;
 using UnityEngine;
 
 namespace Effects
@@ -8,61 +8,61 @@ namespace Effects
     /// </summary>
     public class Bob : MonoBehaviour, IDynamicHeight
     {
-        [field: SerializeField] public float minFloatSpeed { get; private set; } = 0.5f;
-        [field: SerializeField] public float maxFloatSpeed { get; private set; } = 2.0f;
-        [field: SerializeField] public float floatHeight { get; private set; } = 0.1f;
-        [field: SerializeField] public float pickupRange { get; private set; } = 0.0125f;
-        [field: SerializeField] public float pickupSpeed { get; private set; } = 10.0f;
+        [field: SerializeField] public float MinFloatSpeed { get; private set; } = 0.5f;
+        [field: SerializeField] public float MaxFloatSpeed { get; private set; } = 2.0f;
+        [field: SerializeField] public float FloatHeight { get; private set; } = 0.1f;
+        [field: SerializeField] public float PickupRange { get; private set; } = 0.0125f;
+        [field: SerializeField] public float PickupSpeed { get; private set; } = 10.0f;
 
-        private Vector3 startPosition;
-        private float offset;
-        private float floatSpeed;
-        private Transform playerTransform;
-        private bool isFollowingPlayer;
+        private Vector3 _startPosition;
+        private float _offset;
+        private float _floatSpeed;
+        private Transform _playerTransform;
+        private bool _isFollowingPlayer;
 
         public void Start()
         {
-            startPosition = transform.position;
-            offset = Random.Range(-floatHeight, floatHeight);
-            floatSpeed = Random.Range(minFloatSpeed, maxFloatSpeed);
-            playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-            isFollowingPlayer = IsInRange();
+            _startPosition = transform.position;
+            _offset = Random.Range(-FloatHeight, FloatHeight);
+            _floatSpeed = Random.Range(MinFloatSpeed, MaxFloatSpeed);
+            _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+            _isFollowingPlayer = IsInRange();
         }
 
         public void Update()
         {
-            if (!isFollowingPlayer)
+            if (!_isFollowingPlayer)
             {
-                offset = Mathf.Sin(Time.time * floatSpeed) * floatHeight;
-                transform.position = startPosition + new Vector3(0f, offset, 0f);
+                _offset = Mathf.Sin(Time.time * _floatSpeed) * FloatHeight;
+                transform.position = _startPosition + new Vector3(0f, _offset, 0f);
 
                 var isInRange = IsInRange();
                 if (isInRange)
                 {
-                    isFollowingPlayer = true;
+                    _isFollowingPlayer = true;
                 }
             }
             else
             {
-                transform.position = Vector3.MoveTowards(transform.position, playerTransform.position, pickupSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, _playerTransform.position, PickupSpeed * Time.deltaTime);
             }
         }
 
         public float GetHeight()
         {
-            return offset;
+            return _offset;
         }
 
         public void OnDrawGizmos()
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, pickupRange);
+            Gizmos.DrawWireSphere(transform.position, PickupRange);
         }
 
         private bool IsInRange()
         {
-            var distance = Vector2.Distance(transform.position, playerTransform.position);
-            return distance <= pickupRange;
+            var distance = Vector2.Distance(transform.position, _playerTransform.position);
+            return distance <= PickupRange;
         }
     }
 }

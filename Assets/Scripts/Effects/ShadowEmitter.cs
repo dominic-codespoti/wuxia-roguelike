@@ -1,6 +1,6 @@
-using Interfaces;
+using Common;
+using Common.Interfaces;
 using UnityEngine;
-using Utilities;
 
 namespace Effects
 {
@@ -12,38 +12,38 @@ namespace Effects
         public float maxShadowWidth = 10f;
         public float minShadowScale = 0.2f;
 
-        private GameObject shadowObject;
-        private SpriteRenderer shadowRenderer;
-        private Maybe<IDynamicHeight> dynamicHeight;
+        private GameObject _shadowObject;
+        private SpriteRenderer _shadowRenderer;
+        private Maybe<IDynamicHeight> _dynamicHeight;
 
         public void Start()
         {
-            dynamicHeight = gameObject.MaybeGetComponent<IDynamicHeight>();
+            _dynamicHeight = gameObject.MaybeGetComponent<IDynamicHeight>();
 
-            shadowObject = new GameObject("Shadow");
-            shadowObject.transform.parent = transform;
+            _shadowObject = new GameObject("Shadow");
+            _shadowObject.transform.parent = transform;
 
-            shadowRenderer = shadowObject.AddComponent<SpriteRenderer>();
+            _shadowRenderer = _shadowObject.AddComponent<SpriteRenderer>();
 
             Sprite shadowSprite = CreateShadowSprite();
-            shadowRenderer.sprite = shadowSprite;
-            shadowRenderer.color = shadowColor;
-            shadowRenderer.sortingOrder = 3;
+            _shadowRenderer.sprite = shadowSprite;
+            _shadowRenderer.color = shadowColor;
+            _shadowRenderer.sortingOrder = 3;
         }
 
         public void Update()
         {
-            shadowObject.transform.localPosition = (Vector3)shadowOffset;
+            _shadowObject.transform.localPosition = (Vector3)shadowOffset;
 
-            dynamicHeight.Match(
+            _dynamicHeight.Match(
                 some: dh =>
                 {
                     float height = dh.GetHeight();
-                    shadowObject.transform.localPosition -= new Vector3(0, height, 0);
+                    _shadowObject.transform.localPosition -= new Vector3(0, height, 0);
 
                     float normalizedHeight = Mathf.Clamp01(height / maxShadowHeight);
                     float shadowScale = Mathf.Lerp(1f, minShadowScale, normalizedHeight);
-                    shadowObject.transform.localScale = new Vector3(shadowScale, shadowScale, 1f);
+                    _shadowObject.transform.localScale = new Vector3(shadowScale, shadowScale, 1f);
                 },
                 none: () => { });
         }

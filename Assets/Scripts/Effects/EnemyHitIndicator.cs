@@ -1,69 +1,57 @@
-using System.Collections;
+﻿using System.Collections;
+using Common;
+using Common.Eventing;
 using UnityEngine;
-using Utilities;
 
 namespace Effects
 {
+    /// <summary>
+    ///  A hit effect that flashes the sprite white when an enemy hits the player.
+    /// </summary>
     public class EnemyHitIndicator : MonoBehaviour
     {
-        [field: SerializeField] public float KnockbackForce { get; private set; } = 10f;
-        [field: SerializeField] public float KnockbackDuration { get; private set; } = 0.2f;
+        [field: SerializeField] public float FlashDuration { get; private set; } = 0.5f;
+        [field: SerializeField] public float FlashInterval { get; private set; } = 0.1f;
+        [field: SerializeField] public Color FlashColor { get; private set; } = Color.white;
 
         private SpriteRenderer _spriteRenderer;
-        private Color _originalColor;
-        private Vector2 _originalPosition;
-        private bool _isKnockbackActive;
 
         public void Start()
         {
-            _originalPosition = transform.position;
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            _originalColor = _spriteRenderer.color;
-            EventBus.Subscribe<Events.DamageEvent>(evt => DoEffect(evt.Target, evt.Impact), gameObject.Id());
+
+            EventBus.Subscribe<Events.EntityDamaged>(evt => DoEffect(evt.Target), gameObject.Id());
         }
 
-        private void DoEffect(GameObject target, Vector2 impact)
+        private void DoEffect(GameObject target)
         {
-            if (_isKnockbackActive)
-            {
-                return;
-            }
-
-            Vector2 direction = (Vector2)target.transform.position - impact;
-
-            StartCoroutine(ApplyKnockback(direction));
-            StartCoroutine(FlashColor());
-            StartCoroutine(Squish());
+            StartCoroutine(Flash());
+            StartCoroutine(Squish(target));
         }
 
-        private IEnumerator ApplyKnockback(Vector2 direction)
+        private IEnumerator Squish(GameObject target)
         {
-            _isKnockbackActive = true;
+            var originalScale = target.transform.localScale;
+            transform.localScale = new Vector3(originalScale.x * 1.2f, originalScale.y * 0.8f, originalScale.z);
+            yield return new WaitForSeconds(0.1f);
+            transform.localScale = originalScale;
+        }
+
+        private IEnumerator Flash()
+        {
+            var originalColor = _spriteRenderer.color;
             float elapsedTime = 0f;
+            bool isFlashing = true;
 
-            while (elapsedTime < KnockbackDuration)
+            while (elapsedTime < FlashDuration)
             {
-                transform.position += (Vector3)(direction * KnockbackForce * Time.deltaTime);
-                elapsedTime += Time.deltaTime;
-                yield return null;
+                _spriteRenderer.color = isFlashing ? new Color(FlashColor.r, FlashColor.g, FlashColor.b, 0.3f) : originalColor;
+                isFlashing = !isFlashing;
+                elapsedTime += FlashInterval;
+                yield return new WaitForSeconds(FlashInterval);
             }
 
-            _isKnockbackActive = false;
-        }
-
-        private IEnumerator Squish()
-        {
-            transform.localScale = new Vector3(1.2f, 0.8f, 1);
-            yield return new WaitForSeconds(0.1f);
-            transform.localScale = new Vector3(1, 1, 1);
-        }
-
-        private IEnumerator FlashColor()
-        {
-            Color targetColor = new Color(_originalColor.r, _originalColor.g, _originalColor.b, 0.5f);
-            _spriteRenderer.color = targetColor;
-            yield return new WaitForSeconds(0.1f);
-            _spriteRenderer.color = _originalColor;
+            _spriteRenderer.color = originalColor;
         }
     }
 }

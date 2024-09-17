@@ -1,5 +1,8 @@
 using System.Collections;
+using Common;
+using Common.Eventing;
 using UnityEngine;
+using World.Systems;
 
 namespace Effects
 {
@@ -9,13 +12,14 @@ namespace Effects
     class CameraShake : MonoBehaviour
     {
         private Vector3 _initialLocalPosition;
+        private static string PlayerId => GameState.Instance.Player.gameObject.Id();
 
         public void Start()
         {
             _initialLocalPosition = transform.localPosition;
-            EventBus.Subscribe<Events.PlayerDamaged>(evt => Shake(0.1f, 0.1f));
+            EventBus.Subscribe<Events.EntityDamaged>(evt => Shake(0.2f, 0.2f), PlayerId);
         }
-
+ 
         public void Shake(float duration, float magnitude)
         {
             StartCoroutine(DoShake(duration, magnitude));
