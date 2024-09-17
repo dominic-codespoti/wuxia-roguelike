@@ -8,10 +8,10 @@ namespace Entities
     [Serializable]
     public class Stats
     {
-        public int health;
-        public int mana;
-        public int attack;
-        public int speed;
-        public int criticalChance;
+        [field: SerializeField] public int Health { get; set; }
+        [field: SerializeField] public int Mana { get; set; }
+        [field: SerializeField] public int Attack { get; set; }
+        [field: SerializeField] public int Speed { get; set; }
+        [field: SerializeField] public int CriticalChance { get; set; }
     }
 }

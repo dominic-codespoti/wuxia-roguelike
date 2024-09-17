@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Styles/HudStyles.uss?fileID=7433441132597879392&amp;guid=a620c85ff9988ae46abec1df6d236006&amp;type=3#HudStyles" />
+    <ui:VisualElement name="root" style="flex-grow: 1; justify-content: flex-end; align-self: stretch; align-items: flex-start; -unity-font: url(&quot;project://database/Assets/UI/Assets/PixeloidMono.otf?fileID=12800000&amp;guid=7a4b5da99d4be7f478badd6625a9cbf0&amp;type=3#PixeloidMono&quot;); -unity-font-definition: initial;">
+        <ui:ProgressBar value="22" title="my-progress" name="health-bar" style="margin-top: 20px; margin-right: 20px; margin-bottom: 0; margin-left: 20px; width: 15%; align-items: stretch; justify-content: space-between; align-self: flex-start; flex-direction: column;" />
+        <ui:ProgressBar value="22" title="0 / 100 Exp" name="exp-bar" style="width: 15%; margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px; align-self: flex-start;" />
+        <ui:VisualElement name="minimap-container" class="minimap-container" style="flex-grow: 1;">
+            <ui:VisualElement name="player-marker" class="player-marker" style="flex-grow: 1;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

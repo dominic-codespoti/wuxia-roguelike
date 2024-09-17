@@ -15,6 +15,7 @@ namespace Effects
         [field: SerializeField] public Color FlashColor { get; private set; } = Color.white;
 
         private SpriteRenderer _spriteRenderer;
+        private bool _isEffectActive = false;
 
         public void Start()
         {
@@ -25,12 +26,25 @@ namespace Effects
 
         private void DoEffect(GameObject target)
         {
+            _isEffectActive = true;
             StartCoroutine(Flash());
             StartCoroutine(Squish(target));
+            StartCoroutine(FinishEffect());
+        }
+        
+        private IEnumerator FinishEffect()
+        {
+            yield return new WaitForSeconds(FlashDuration);
+            _isEffectActive = false;
         }
 
         private IEnumerator Squish(GameObject target)
         {
+            if (_isEffectActive)
+            {
+                yield break;
+            }
+
             var originalScale = target.transform.localScale;
             transform.localScale = new Vector3(originalScale.x * 1.2f, originalScale.y * 0.8f, originalScale.z);
             yield return new WaitForSeconds(0.1f);
@@ -39,6 +53,11 @@ namespace Effects
 
         private IEnumerator Flash()
         {
+            if (_isEffectActive)
+            {
+                yield break;
+            }
+
             var originalColor = _spriteRenderer.color;
             float elapsedTime = 0f;
             bool isFlashing = true;

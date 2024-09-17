@@ -44,10 +44,14 @@ namespace Entities.Combat
             {
                 return;
             }
-            
-            var impact = transform.position;
-            EventBus.Publish(new Events.EntityDamaged(impact, collision.gameObject, Damage));
-            EventBus.Publish(new Events.EntityDamaged(impact, collision.gameObject, Damage), collision.gameObject.Id());
+
+            // If the object hit is damageable, deal damage to it
+            if (hittable is IDamageable damageable)
+            {
+                var impact = transform.position;
+                EventBus.Publish(new Events.EntityDamaged(impact, collision.gameObject, Damage));
+                EventBus.Publish(new Events.EntityDamaged(impact, collision.gameObject, Damage), collision.gameObject.Id());
+            }
 
             Destroy(gameObject);
         }

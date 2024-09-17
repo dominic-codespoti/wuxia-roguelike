@@ -59,7 +59,7 @@ namespace Entities.Player
 
             Vector3 direction = (mousePosition - transform.position).normalized;
             var startingPosition = transform.position;
-            var damage = skill.Damage + _player.Stats.attack;
+            var damage = skill.Damage + _player.Stats.Attack;
 
             float projectileOffset = 1f;
             Vector3 spawnPosition = startingPosition + direction * projectileOffset;

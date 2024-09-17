@@ -15,16 +15,16 @@ namespace Entities.Player
     [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(BoxCollider2D))]
     public class PlayerController : MonoBehaviour, IMovementController
     {
-        [field: SerializeField] public float Speed { get; set; } = 5.0f;
-        [field: SerializeField] public float DashForce { get; set; } = 10.0f;
-        [field: SerializeField] public float AccelerationTime { get; set; } = 0.2f;
-        [field: SerializeField] public float DecelerationTime { get; set; } = 0.1f;
-        [field: SerializeField] public float FrictionCoefficient { get; set; } = 0.5f;
-        [field: SerializeField] public GameObject DashEffectPrefab { get; set; }
-        [field: SerializeField] public MovementState MovementState { get; set; }
-        [field: SerializeField] public MovementDirection MovementDirection { get; set; }
-        [field: SerializeField] public float DashDuration { get; set; } = 0.2f;
-        [field: SerializeField] public float DashCooldown { get; set; } = 1.0f;
+        [field: SerializeField] public float Speed { get; private set; } = 5.0f;
+        [field: SerializeField] public float DashForce { get; private set; } = 10.0f;
+        [field: SerializeField] public float AccelerationTime { get; private set; } = 0.2f;
+        [field: SerializeField] public float DecelerationTime { get; private set; } = 0.1f;
+        [field: SerializeField] public float FrictionCoefficient { get; private set; } = 0.5f;
+        [field: SerializeField] public GameObject DashEffectPrefab { get; private set; }
+        [field: SerializeField] public MovementState MovementState { get; private set; }
+        [field: SerializeField] public MovementDirection MovementDirection { get; private set; }
+        [field: SerializeField] public float DashDuration { get; private set; } = 0.2f;
+        [field: SerializeField] public float DashCooldown { get; private set; } = 1.0f;
 
         private Animator _animator;
         private Rigidbody2D _body;

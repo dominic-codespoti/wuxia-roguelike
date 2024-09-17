@@ -84,11 +84,12 @@ namespace Entities.Player
 
         private void LearnPassiveSkill(PassiveSkill skill)
         {
+            _passiveSkills.Add(skill);
             switch (skill.effectorType)
             {
                 case EffectorType.Attack:
-                    var mod = AttackModifiers.For(_playerAttackController, skill);
-                    _playerAttackController.AddModifier(mod);
+                    var attackMod = AttackModifiers.For(_playerAttackController, skill);
+                    _playerAttackController.AddModifier(attackMod);
                     break;
                 case EffectorType.Dash:
                     var dashMod = DashModifiers.For(_playerController, skill);
@@ -104,8 +105,8 @@ namespace Entities.Player
         private void LevelUp()
         {
             Experience = 0;
-            CurrentHealth = Stats.health;
-            CurrentMana = Stats.mana;
+            CurrentHealth = Stats.Health;
+            CurrentMana = Stats.Mana;
             Level += 1;
 
             EventBus.Publish(new Events.PlayerLeveledUp(this));

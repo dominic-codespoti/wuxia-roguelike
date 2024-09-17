@@ -33,7 +33,7 @@ namespace Effects
 
         public void Update()
         {
-            _shadowObject.transform.localPosition = (Vector3)shadowOffset;
+            _shadowObject.transform.localPosition = shadowOffset;
 
             _dynamicHeight.Match(
                 some: dh =>

@@ -125,7 +125,7 @@ namespace Entities.Enemy.State
                     {
                         if (collider.TryGetComponent(out IDamageable playerDamageable))
                         {
-                            EventBus.Publish(new Events.EntityDamaged(_chargeDirection, boss.gameObject, boss.Stats.attack), collider.gameObject.Id());
+                            EventBus.Publish(new Events.EntityDamaged(_chargeDirection, boss.gameObject, boss.Stats.Attack), collider.gameObject.Id());
                         }
                     }
                     return; // Exit the method early if we've hit something

@@ -24,7 +24,7 @@ namespace Entities.Enemy.State
             else
             {
                 _roamTimer -= Time.deltaTime;
-                enemy.transform.position = Vector2.MoveTowards(enemy.transform.position, _roamTarget, enemy.Stats.speed * Time.deltaTime);
+                enemy.transform.position = Vector2.MoveTowards(enemy.transform.position, _roamTarget, enemy.Stats.Speed * Time.deltaTime);
             }
         }
 
@@ -64,7 +64,7 @@ namespace Entities.Enemy.State
         public void Execute(Enemy enemy)
         {
             Vector2 directionToPlayer = enemy.DirectionToPlayer();
-            enemy.GetComponent<Rigidbody2D>().velocity = directionToPlayer * enemy.Stats.speed;
+            enemy.GetComponent<Rigidbody2D>().velocity = directionToPlayer * enemy.Stats.Speed;
         }
 
         public void Exit(Enemy enemy)
@@ -116,7 +116,7 @@ namespace Entities.Enemy.State
             else
             {
                 Vector2 direction = enemy.DirectionToPlayer();
-                enemy.GetComponent<Rigidbody2D>().velocity = direction * enemy.Stats.speed;
+                enemy.GetComponent<Rigidbody2D>().velocity = direction * enemy.Stats.Speed;
             }
         }
 
@@ -152,7 +152,7 @@ namespace Entities.Enemy.State
                     if (damageable != null)
                     {
                         Vector2 impact = enemy.transform.position - hitCollider.transform.position;
-                        EventBus.Publish(new Events.EntityDamaged(impact, hitCollider.gameObject, enemy.Stats.attack));
+                        EventBus.Publish(new Events.EntityDamaged(impact, hitCollider.gameObject, enemy.Stats.Attack));
                         _hasAttacked = true;
                         _lastAttackTime = Time.time;
 

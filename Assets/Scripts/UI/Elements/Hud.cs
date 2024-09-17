@@ -63,10 +63,10 @@ namespace UI.Elements
     private void UpdateHealthBar()
     {
       Label healthLabel = _healthBar.Q<Label>();
-      healthLabel.text = $"{_player.CurrentHealth} / {_player.Stats.health}";
+      healthLabel.text = $"{_player.CurrentHealth} / {_player.Stats.Health}";
       _healthBar.value = _player.CurrentHealth;
       _healthBar.lowValue = 0;
-      _healthBar.highValue = _player.Stats.health;
+      _healthBar.highValue = _player.Stats.Health;
     }
 
     private void UpdateExpBar()

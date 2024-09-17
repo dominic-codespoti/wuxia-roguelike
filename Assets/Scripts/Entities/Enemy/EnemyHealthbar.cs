@@ -9,6 +9,7 @@ namespace Entities.Enemy
   class EnemyHealthbar : MonoBehaviour
   {
     [field: SerializeField] public GameObject HealthBarPrefab { get; private set; }
+
     private GameObject _healthBar;
     private Enemy _damageable;
     private Vector3 _initialFillScale;
@@ -31,7 +32,7 @@ namespace Entities.Enemy
       }
 
       float health = _damageable.CurrentHealth;
-      float maxHealth = _damageable.Stats.health;
+      float maxHealth = _damageable.Stats.Health;
 
       if (maxHealth != 0)
       {

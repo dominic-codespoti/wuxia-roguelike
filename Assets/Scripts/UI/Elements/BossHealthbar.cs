@@ -46,7 +46,7 @@ namespace UI.Elements
                 var boss = _currentBoss.Value;
                 _healthBar.value = boss.CurrentHealth;
                 _healthBar.lowValue = 0;
-                _healthBar.highValue = boss.Stats.health;
+                _healthBar.highValue = boss.Stats.Health;
             }
         }
         

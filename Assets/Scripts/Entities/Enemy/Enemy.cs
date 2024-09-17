@@ -14,16 +14,16 @@ namespace Entities.Enemy
     public class Enemy : Character
     {
         [field: SerializeField] public GameObject ExperienceOrbPrefab { get; private set; }
-        [field: SerializeField] public float DetectionRange { get; set; } = 15f;
-        [field: SerializeField] public float AttackRange { get; set; } = 2f;
-        [field: SerializeField] public Room Room { get; set; }
+        [field: SerializeField] public float DetectionRange { get; private set; } = 15f;
+        [field: SerializeField] public float AttackRange { get; private set; } = 2f;
+        [field: SerializeField] public Room Room { get; private set; }
 
         protected bool IsBoss;
         protected EnemyStateMachine StateMachine;
 
         public void Start()
         {
-            CurrentHealth = Stats.health;
+            CurrentHealth = Stats.Health;
             
             EventBus.Subscribe<Events.EntityDamaged>((evt) => TakeHit(evt.Damage, evt.Impact), gameObject.Id());
         }
@@ -38,8 +38,8 @@ namespace Entities.Enemy
             StateMachine = new EnemyStateMachine(this, new RoamState());
             var randomExpMultiplier = Random.Range(2.4f, 5.6f);
             Experience = level * (int)randomExpMultiplier;
-            Stats.health = level * 10;
-            CurrentHealth = Stats.health;
+            Stats.Health = level * 10;
+            CurrentHealth = Stats.Health;
         }
         
         public void SetRoom(Room room)

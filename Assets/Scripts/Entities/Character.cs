@@ -9,7 +9,7 @@ namespace Entities
         [field: SerializeField] public int Level { get; protected set; } = 1;
         [field: SerializeField] public int Experience { get; protected set; } = 0;
         [field: SerializeField] public Stats Stats { get; protected set; }
-        [field: SerializeField] public int CurrentHealth { get; set; }
-        [field: SerializeField] public int CurrentMana { get; set; }
+        [field: SerializeField] public int CurrentHealth { get; protected set; }
+        [field: SerializeField] public int CurrentMana { get; protected set; }
     }
 }
