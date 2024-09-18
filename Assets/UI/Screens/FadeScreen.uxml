@@ -1,5 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="root" style="height: 100%;">
-        <ui:VisualElement name="popup-container" class="popup-container" style="height: 100%; position: relative;" />
-    </ui:VisualElement>
-</ui:UXML>
