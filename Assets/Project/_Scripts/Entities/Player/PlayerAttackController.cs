@@ -16,7 +16,6 @@ namespace Project._Scripts.Entities.Player
 
         private Camera _mainCamera;
         private Player _player;
-        private BoxCollider2D _origin;
         private ActiveSkillManager _activeSkillManager;
         private List<PassiveModifier<Projectile>> _modifiers = new();
 
@@ -25,7 +24,6 @@ namespace Project._Scripts.Entities.Player
             _activeSkillManager = GetComponent<ActiveSkillManager>();
             _mainCamera = Camera.main;
             _player = GetComponent<Player>();
-            _origin = _player.GetComponent<BoxCollider2D>();
         }
 
         public void Update()
@@ -66,12 +64,17 @@ namespace Project._Scripts.Entities.Player
 
             Projectile projectile = Instantiate(skill.AttackPrefab, spawnPosition, Quaternion.identity).GetComponent<Projectile>();
             projectile.transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
-            projectile.Setup(damage, "Player", false);
+            projectile.Setup(damage, "Player", DefaultPath);
             
             foreach (var modifier in _modifiers)
             {
                 modifier.Modify(projectile);
             }
+        }
+        
+        private static void DefaultPath(Projectile projectile, Rigidbody2D rigidbody)
+        {
+            rigidbody.velocity = projectile.transform.up * projectile.Speed;
         }
     }
 }

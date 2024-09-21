@@ -7,7 +7,7 @@ namespace Project._Scripts.Entities.Combat
     {
         public string Name;
         public string Description;
-        public Attack AttackPrefab;
+        public Projectile AttackPrefab;
         public GameObject EffectPrefab;
         public float Cooldown;
         public int Damage;

@@ -163,5 +163,19 @@ namespace Project._Scripts.Common.Eventing
                 Experience = experience;
             }
         }
+
+        public class PlayerTookDamage : Event
+        {
+            public Player Player { get; }
+            public int Damage { get; }
+            public Vector2 Impact { get; }
+
+            public PlayerTookDamage(Player player, int damage, Vector2 impact)
+            {
+                Player = player;
+                Damage = damage;
+                Impact = impact;
+            }
+        }
     }
 }

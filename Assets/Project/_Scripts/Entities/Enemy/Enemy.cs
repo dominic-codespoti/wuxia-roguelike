@@ -1,6 +1,7 @@
 using Project._Scripts.Common;
 using Project._Scripts.Common.Eventing;
 using Project._Scripts.Entities.Enemy.State;
+using Project._Scripts.Entities.Enemy.State.Base;
 using Project._Scripts.World;
 using Project._Scripts.World.Systems;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace Project._Scripts.Entities.Enemy
         [field: SerializeField] public Room Room { get; private set; }
 
         protected bool IsBoss;
-        protected EnemyStateMachine StateMachine;
+        protected EnemyStateMachine<Enemy> StateMachine;
 
         public void Start()
         {
@@ -29,12 +30,17 @@ namespace Project._Scripts.Entities.Enemy
 
         public void Update()
         {
+            ChangeState();
+        }
+
+        public virtual void ChangeState()
+        {
             StateMachine.Update();
         }
 
         public virtual void Configure(int level)
         {
-            StateMachine = new EnemyStateMachine(this, new RoamState());
+            StateMachine = new EnemyStateMachine<Enemy>(this, new RoamState());
             var randomExpMultiplier = Random.Range(2.4f, 5.6f);
             Experience = level * (int)randomExpMultiplier;
             Stats.Health = level * 10;
@@ -46,7 +52,7 @@ namespace Project._Scripts.Entities.Enemy
             Room = room;
         }
 
-        private void TakeHit(int damage, Vector2 impact)
+        protected virtual void TakeHit(int damage, Vector2 impact)
         {
             CurrentHealth -= damage;
             if (CurrentHealth <= 0)

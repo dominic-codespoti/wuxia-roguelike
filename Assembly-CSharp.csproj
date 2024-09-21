@@ -59,7 +59,7 @@
     <UnityVersion>2022.3.25f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Users\domco\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.0.3\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Users\domco\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.0.4\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="E:\UnityHubs\2022.3.25f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="E:\UnityHubs\2022.3.25f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
@@ -68,10 +68,12 @@
     <Compile Include="Assets\Project\_Scripts\Entities\Player\PlayerAttackController.cs" />
     <Compile Include="Assets\Project\_Scripts\Common\Maybe.cs" />
     <Compile Include="Assets\Project\_Scripts\Common\Eventing\EventBus.cs" />
+    <Compile Include="Assets\Project\_Scripts\Entities\Enemy\State\Base\EnemyStateMachine.cs" />
     <Compile Include="Assets\Project\_Scripts\World\Factories\PrefabFactory.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Enemy\State\BossSlimeEnemyState.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Player\PlayerLevelTable.cs" />
     <Compile Include="Assets\Project\_Scripts\Common\Interfaces\IHittable.cs" />
+    <Compile Include="Assets\Project\_Scripts\Entities\Enemy\State\Base\IEnemyState.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Combat\PassiveSkill.cs" />
     <Compile Include="Assets\Project\_Scripts\Effects\PlayerHitIndicator.cs" />
     <Compile Include="Assets\Project\_Scripts\Common\Interfaces\IDynamicHeight.cs" />
@@ -92,11 +94,9 @@
     <Compile Include="Assets\Project\_Scripts\Entities\Skills\AttackModifiers.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Combat\Skill.cs" />
     <Compile Include="Assets\Project\_Scripts\Common\PrimitiveExtensions.cs" />
-    <Compile Include="Assets\Project\_Scripts\Entities\Enemy\State\EnemyStateMachine.cs" />
     <Compile Include="Assets\Project\_Scripts\World\Wall.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Enemy\Bosses\Boss.cs" />
     <Compile Include="Assets\Project\_Scripts\Common\Eventing\Events.cs" />
-    <Compile Include="Assets\Project\_Scripts\Entities\Combat\OnHitEffect.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Skills\DashModifiers.cs" />
     <Compile Include="Assets\Project\_Scripts\UI\CursorController.cs" />
     <Compile Include="Assets\Project\_Scripts\Common\Interfaces\IAttackController.cs" />
@@ -106,7 +106,6 @@
     <Compile Include="Assets\Project\_Scripts\Effects\DamageText.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Enemy\ExperienceOrb.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Player\Player.cs" />
-    <Compile Include="Assets\Project\_Scripts\Entities\Enemy\State\IEnemyState.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Enemy\BossNamer.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Enemy\Enemy.cs" />
     <Compile Include="Assets\Project\_Scripts\World\Systems\MapGenerator.cs" />
@@ -115,7 +114,6 @@
     <Compile Include="Assets\Project\_Scripts\World\Systems\RoomBasedEnemySpawner.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Player\PlayerController.cs" />
     <Compile Include="Assets\Project\_Scripts\Effects\EnemyHitIndicator.cs" />
-    <Compile Include="Assets\Project\_Scripts\Entities\Combat\Melee.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Skills\PlayerModifiers.cs" />
     <Compile Include="Assets\Project\_Scripts\UI\Elements\BossHealthbar.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Combat\Projectile.cs" />
@@ -126,7 +124,6 @@
     <Compile Include="Assets\Project\_Scripts\Entities\Combat\SkillRarity.cs" />
     <Compile Include="Assets\Project\_Scripts\Common\Interfaces\IDamageable.cs" />
     <Compile Include="Assets\Project\_Scripts\Effects\ShadowEmitter.cs" />
-    <Compile Include="Assets\Project\_Scripts\Entities\Combat\Attack.cs" />
     <Compile Include="Assets\Project\_Scripts\Common\Interfaces\IMovementController.cs" />
     <Compile Include="Assets\Project\_Scripts\Entities\Stats.cs" />
     <Compile Include="Assets\Project\_Scripts\UI\Elements\FadeScreen.cs" />

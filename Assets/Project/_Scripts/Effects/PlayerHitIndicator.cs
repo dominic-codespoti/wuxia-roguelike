@@ -25,12 +25,11 @@ namespace Project._Scripts.Effects
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _originalColor = _spriteRenderer.color;
 
-            EventBus.Subscribe<Events.EntityDamaged>(evt => DoEffect(evt.Target.GetComponent<Player>()), PlayerId);
+            EventBus.Subscribe<Events.PlayerTookDamage>(evt => DoEffect(evt.Player), PlayerId);
         }
 
         private void DoEffect(Player player)
         {
-            player.SetInvincible(true);
             StartCoroutine(Flash(player));
         }
 
@@ -48,7 +47,6 @@ namespace Project._Scripts.Effects
             }
 
             _spriteRenderer.color = _originalColor;
-            player.SetInvincible(false);
         }
     }
 }

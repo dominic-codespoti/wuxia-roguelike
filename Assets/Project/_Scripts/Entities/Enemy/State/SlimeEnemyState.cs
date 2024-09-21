@@ -1,10 +1,13 @@
-﻿using Project._Scripts.Common.Eventing;
+﻿using Project._Scripts.Common;
+using Project._Scripts.Common.Eventing;
 using Project._Scripts.Common.Interfaces;
+using Project._Scripts.Entities.Enemy.State.Base;
+using Project._Scripts.World.Systems;
 using UnityEngine;
 
 namespace Project._Scripts.Entities.Enemy.State
 {
-    public class RoamState : IEnemyState
+    public class RoamState : IEnemyState<Enemy>
     {
         private Vector2 _roamTarget;
         private float _roamTimer;
@@ -32,7 +35,7 @@ namespace Project._Scripts.Entities.Enemy.State
             // Clean up any roam-specific things
         }
 
-        public IEnemyState CheckTransitions(Enemy enemy)
+        public IEnemyState<Enemy> CheckTransitions(Enemy enemy)
         {
             if (enemy.DistanceToPlayer() < enemy.DetectionRange)
             {
@@ -53,7 +56,7 @@ namespace Project._Scripts.Entities.Enemy.State
         }
     }
 
-    public class ChaseState : IEnemyState
+    public class ChaseState : IEnemyState<Enemy>
     {
         public void Enter(Enemy enemy)
         {
@@ -71,7 +74,7 @@ namespace Project._Scripts.Entities.Enemy.State
             
         }
 
-        public IEnemyState CheckTransitions(Enemy enemy)
+        public IEnemyState<Enemy> CheckTransitions(Enemy enemy)
         {
             float distanceToPlayer = enemy.DistanceToPlayer();
             if (distanceToPlayer <= enemy.AttackRange)
@@ -83,15 +86,11 @@ namespace Project._Scripts.Entities.Enemy.State
         }
     }
 
-    public class AttackState : IEnemyState
+    public class AttackState : IEnemyState<Enemy>
     {
         private bool _hasAttacked = false;
         private float _attackCooldown = 1f;
         private float _lastAttackTime = 0f;
-        private Vector2 _hopBackDirection;
-        private float _hopBackSpeed = 5f;
-        private float _hopBackDuration = 0.2f;
-        private float _hopBackTimer = 0f;
 
         public void Enter(Enemy enemy)
         {
@@ -102,12 +101,6 @@ namespace Project._Scripts.Entities.Enemy.State
 
         public void Execute(Enemy enemy)
         {
-            if (_hopBackTimer > 0)
-            {
-                PerformHopBack(enemy);
-                return;
-            }
-
             if (!_hasAttacked && Time.time - _lastAttackTime >= _attackCooldown)
             {
                 AttemptAttack(enemy);
@@ -121,18 +114,13 @@ namespace Project._Scripts.Entities.Enemy.State
 
         public void Exit(Enemy enemy)
         {
-            enemy.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            
         }
 
-        public IEnemyState CheckTransitions(Enemy enemy)
+        public IEnemyState<Enemy> CheckTransitions(Enemy enemy)
         {
-            if (_hopBackTimer > 0)
-            {
-                return this;
-            }
-
             float distanceToPlayer = enemy.DistanceToPlayer();
-            if (distanceToPlayer > enemy.AttackRange * 1.5f) // Add some hysteresis
+            if (distanceToPlayer > enemy.AttackRange * 1.5f)
             {
                 return new ChaseState();
             }
@@ -145,33 +133,22 @@ namespace Project._Scripts.Entities.Enemy.State
             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(enemy.transform.position, enemy.AttackRange);
             foreach (var hitCollider in hitColliders)
             {
-                if (hitCollider.CompareTag("Player"))
+                if (hitCollider.gameObject.GetComponent<Player.Player>() != null)
                 {
                     IDamageable damageable = hitCollider.GetComponent<IDamageable>();
                     if (damageable != null)
                     {
                         Vector2 impact = enemy.transform.position - hitCollider.transform.position;
-                        EventBus.Publish(new Events.EntityDamaged(impact, hitCollider.gameObject, enemy.Stats.Attack));
+                        
+                        var playerId = GameState.Instance.Player.gameObject.Id();
+                        EventBus.Publish(new Events.EntityDamaged(impact, hitCollider.gameObject, enemy.Stats.Attack), playerId);
+
                         _hasAttacked = true;
                         _lastAttackTime = Time.time;
-
-                        // Initiate hop back
-                        _hopBackDirection = -impact.normalized;
-                        _hopBackTimer = _hopBackDuration;
+                        
                         break;
                     }
                 }
-            }
-        }
-
-        private void PerformHopBack(Enemy enemy)
-        {
-            enemy.GetComponent<Rigidbody2D>().velocity = _hopBackDirection * _hopBackSpeed;
-            _hopBackTimer -= Time.deltaTime;
-
-            if (_hopBackTimer <= 0)
-            {
-                enemy.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             }
         }
     }

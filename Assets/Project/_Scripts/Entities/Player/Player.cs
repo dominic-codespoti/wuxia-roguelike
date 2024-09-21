@@ -67,6 +67,8 @@ namespace Project._Scripts.Entities.Player
             {
                 return;
             }
+            
+            EventBus.Publish(new Events.PlayerTookDamage(this, damage, impact));
 
             CurrentHealth -= damage;
             if (CurrentHealth <= 0)

@@ -1,11 +1,11 @@
-﻿namespace Project._Scripts.Entities.Enemy.State
+﻿namespace Project._Scripts.Entities.Enemy.State.Base
 {
-    public class EnemyStateMachine
+    public class EnemyStateMachine<T> where T : Enemy
     {
-        private Enemy _enemy;
-        private IEnemyState _currentState;
+        private T _enemy;
+        private IEnemyState<T> _currentState;
 
-        public EnemyStateMachine(Enemy enemy, IEnemyState initialState)
+        public EnemyStateMachine(T enemy, IEnemyState<T> initialState)
         {
             this._enemy = enemy;
             _currentState = initialState;
@@ -14,7 +14,7 @@
 
         public void Update()
         {
-            IEnemyState newState = _currentState.CheckTransitions(_enemy);
+            IEnemyState<T> newState = _currentState.CheckTransitions(_enemy);
             if (newState != _currentState)
             {
                 TransitionToState(newState);
@@ -22,7 +22,7 @@
             _currentState.Execute(_enemy);
         }
 
-        private void TransitionToState(IEnemyState newState)
+        private void TransitionToState(IEnemyState<T> newState)
         {
             _currentState.Exit(_enemy);
             _currentState = newState;

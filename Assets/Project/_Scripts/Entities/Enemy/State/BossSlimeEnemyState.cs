@@ -2,133 +2,115 @@
 using Project._Scripts.Common.Eventing;
 using Project._Scripts.Common.Interfaces;
 using Project._Scripts.Entities.Enemy.Bosses;
+using Project._Scripts.Entities.Enemy.State.Base;
 using Project._Scripts.World.Systems;
 using UnityEngine;
 
 namespace Project._Scripts.Entities.Enemy.State
 {
-    public class ChargeBossRoamState : IEnemyState
+    public class ChargeBossRoamState : IEnemyState<ChargeAttackBoss>
     {
         private float _stateTimer;
         private Vector3 _roamDirection;
 
-        public void Enter(Enemy enemy) 
+        public void Enter(ChargeAttackBoss boss) 
         {
-            ChargeAttackBoss boss = enemy as ChargeAttackBoss;
-            if (boss == null) return;
-
             _stateTimer = boss.RoamDuration;
-            _roamDirection = (boss.transform.position - GameState.Instance.Player.transform.position).normalized;
+            _roamDirection = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0).normalized;
         }
 
-        public void Execute(Enemy enemy)
+        public void Execute(ChargeAttackBoss boss)
         {
-            ChargeAttackBoss boss = enemy as ChargeAttackBoss;
-            if (boss == null) return;
-
             _stateTimer -= Time.deltaTime;
             boss.transform.position += _roamDirection * boss.RoamSpeed * Time.deltaTime;
         }
 
-        public void Exit(Enemy enemy) { }
+        public void Exit(ChargeAttackBoss boss)
+        {
+            
+        }
 
-        public IEnemyState CheckTransitions(Enemy enemy)
+        public IEnemyState<ChargeAttackBoss> CheckTransitions(ChargeAttackBoss boss)
         {
             if (_stateTimer <= 0)
             {
                 return new ChargeBossWindupState();
             }
+
             return this;
         }
     }
 
-    public class ChargeBossWindupState : IEnemyState
+    public class ChargeBossWindupState : IEnemyState<ChargeAttackBoss>
     {
         private float _stateTimer;
 
-        public void Enter(Enemy enemy)
+        public void Enter(ChargeAttackBoss boss)
         {
-            ChargeAttackBoss boss = enemy as ChargeAttackBoss;
-            if (boss == null) return;
-
             _stateTimer = boss.ChargeWindupTime;
-            boss.IsInvulnerable = true;
+            boss.ToggleInvulnerability(true);
             boss.SpriteRenderer.color = Color.red;
         }
 
-        public void Execute(Enemy enemy)
+        public void Execute(ChargeAttackBoss boss)
         {
-            ChargeAttackBoss boss = enemy as ChargeAttackBoss;
-            if (boss == null) return;
-
             _stateTimer -= Time.deltaTime;
             float squishFactor = Mathf.Sin(_stateTimer * boss.SquishFrequency) * boss.SquishAmplitude;
             boss.transform.localScale = new Vector3(boss.OriginalScale.x - squishFactor, boss.OriginalScale.y + squishFactor, boss.OriginalScale.z);
         }
 
-        public void Exit(Enemy enemy)
+        public void Exit(ChargeAttackBoss boss)
         {
-            ChargeAttackBoss boss = enemy as ChargeAttackBoss;
-            if (boss == null) return;
-
             boss.transform.localScale = boss.OriginalScale;
+            boss.SpriteRenderer.color = boss.OriginalColor;
         }
 
-        public IEnemyState CheckTransitions(Enemy enemy)
+        public IEnemyState<ChargeAttackBoss> CheckTransitions(ChargeAttackBoss boss)
         {
             if (_stateTimer <= 0)
             {
-                var chargeDirection = (GameState.Instance.Player.transform.position - enemy.transform.position).normalized;
-                return new ChargeBossChargeState(chargeDirection);
+                return new ChargeBossChargeState();
             }
 
             return this;
         }
     }
-
     
-    public class ChargeBossChargeState : IEnemyState
+    public class ChargeBossChargeState : IEnemyState<ChargeAttackBoss>
     {
-        private Vector2 _chargeDirection;
         private bool _hasHit;
+        private Vector3 _chargeDirection;
 
-        public ChargeBossChargeState(Vector2 chargeDirection)
+        public ChargeBossChargeState()
         {
-            _chargeDirection = chargeDirection.normalized;
+            
         }
 
-        public void Enter(Enemy enemy)
+        public void Enter(ChargeAttackBoss boss)
         {
-            ChargeAttackBoss boss = enemy as ChargeAttackBoss;
-            if (boss == null) return;
-
-            boss.IsInvulnerable = true;
+            _chargeDirection = (GameState.Instance.Player.transform.position - boss.transform.position).normalized;
+            boss.ToggleInvulnerability(false);
             _hasHit = false;
         }
 
-        public void Execute(Enemy enemy)
+        public void Execute(ChargeAttackBoss boss)
         {
-            ChargeAttackBoss boss = enemy as ChargeAttackBoss;
-            if (boss == null) return;
-            
             // Simple dash movement
-            Vector3 newPosition = boss.transform.position + (Vector3)_chargeDirection * boss.ChargeSpeed * Time.deltaTime;
+            Vector3 newPosition = boss.transform.position + _chargeDirection * boss.ChargeSpeed * Time.deltaTime;
             
             // Check for collision with any collider
             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(newPosition, boss.AttackRange);
             foreach (var collider in hitColliders)
             {
-                if (collider.gameObject != boss.gameObject) // Ignore self-collision
+                if (collider.gameObject != boss.gameObject && collider.TryGetComponent<IDamageable>(out _))
                 {
                     _hasHit = true;
-                    if (collider.CompareTag("Player"))
+                    if (collider.TryGetComponent<Player.Player>(out var player))
                     {
-                        if (collider.TryGetComponent(out IDamageable playerDamageable))
-                        {
-                            EventBus.Publish(new Events.EntityDamaged(_chargeDirection, boss.gameObject, boss.Stats.Attack), collider.gameObject.Id());
-                        }
+                        var playerId = GameState.Instance.Player.gameObject.Id();
+                        EventBus.Publish(new Events.EntityDamaged(_chargeDirection, player.gameObject, boss.Stats.Attack), playerId);
                     }
-                    return; // Exit the method early if we've hit something
+                    return;
                 }
             }
             
@@ -136,21 +118,19 @@ namespace Project._Scripts.Entities.Enemy.State
             boss.transform.position = newPosition;
         }
 
-        public void Exit(Enemy enemy)
+        public void Exit(ChargeAttackBoss boss)
         {
-            ChargeAttackBoss boss = enemy as ChargeAttackBoss;
-            if (boss == null) return;
-
-            boss.IsInvulnerable = false;
-            boss.SpriteRenderer.color = Color.white;
+            boss.SpriteRenderer.color = boss.OriginalColor;
+            boss.transform.localScale = boss.OriginalScale;
         }
 
-        public IEnemyState CheckTransitions(Enemy enemy)
+        public IEnemyState<ChargeAttackBoss> CheckTransitions(ChargeAttackBoss boss)
         {
             if (_hasHit)
             {
                 return new ChargeBossRoamState();
             }
+
             return this;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Project._Scripts.Entities.Enemy.State;
+using Project._Scripts.Entities.Enemy.State.Base;
 using UnityEngine;
 
 namespace Project._Scripts.Entities.Enemy.Bosses
@@ -14,8 +15,9 @@ namespace Project._Scripts.Entities.Enemy.Bosses
         [SerializeField] private float squishAmplitude = 0.2f;
 
         public Vector3 OriginalScale { get; private set; }
-        public bool IsInvulnerable { get; set; }
+        public bool IsInvulnerable { get; private set; }
         public SpriteRenderer SpriteRenderer { get; private set; }
+        public Color OriginalColor { get; private set; }
 
         public float RoamSpeed => roamSpeed;
         public float RoamDuration => roamDuration;
@@ -24,23 +26,35 @@ namespace Project._Scripts.Entities.Enemy.Bosses
         public float ChargeDuration => chargeDuration;
         public float SquishFrequency => squishFrequency;
         public float SquishAmplitude => squishAmplitude;
+        public new EnemyStateMachine<ChargeAttackBoss> StateMachine { get; private set; }
 
         public override void Configure(int level)
         {
             base.Configure(level);
 
             IsBoss = true;
-            StateMachine = new EnemyStateMachine(this, new ChargeBossRoamState());
-
-            OriginalScale = transform.localScale;
+            StateMachine = new EnemyStateMachine<ChargeAttackBoss>(this, new ChargeBossRoamState());
+            
             SpriteRenderer = GetComponent<SpriteRenderer>();
+            OriginalScale = transform.localScale;
+            OriginalColor = SpriteRenderer.color;
         }
 
-        public void TakeHit(int damage, Vector2 impact)
+        public override void ChangeState()
+        {
+            StateMachine.Update();
+        }
+        
+        public void ToggleInvulnerability(bool state)
+        {
+            IsInvulnerable = state;
+        }
+        
+        protected override void TakeHit(int damage, Vector2 impact)
         {
             if (!IsInvulnerable)
             {
-                TakeHit(damage, impact);
+                base.TakeHit(damage, impact);
             }
         }
     }

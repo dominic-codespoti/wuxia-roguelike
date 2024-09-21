@@ -1,3 +1,4 @@
+using System;
 using Project._Scripts.Common;
 using Project._Scripts.Common.Eventing;
 using Project._Scripts.Common.Interfaces;
@@ -8,8 +9,15 @@ namespace Project._Scripts.Entities.Combat
     /// <summary>
     /// A 2D projectile that moves in a straight line.
     /// </summary>
-    public class Projectile : Attack
+    public class Projectile : MonoBehaviour
     {
+        [field: SerializeField] public float Speed { get; private set; } = 10f;
+        [field: SerializeField] public float Lifetime { get; private set; } = 2f;
+        [field: SerializeField] public int Damage { get; private set; }
+        [field: SerializeField] public string Aggressor { get; private set; }
+        [field: SerializeField] public ParticleSystem HitEffect { get; private set; }
+        [field: SerializeField] public Action<Projectile, Rigidbody2D> MovementAction { get; private set; }
+
         private BoxCollider2D _box;
         private Rigidbody2D _rigidbody;
 
@@ -28,7 +36,32 @@ namespace Project._Scripts.Entities.Combat
 
         public void Update()
         {
-            _rigidbody.velocity = transform.up * Speed;
+            MovementAction(this, _rigidbody);
+        }
+
+        public void Setup(int damage, string aggressor, Action<Projectile, Rigidbody2D> movementAction)
+        {
+            Damage = damage;
+            Aggressor = aggressor;
+            MovementAction = movementAction;
+        }
+        
+        public Projectile Clone()
+        {
+            GameObject newGameObject = Instantiate(gameObject);
+            Projectile newProjectile = newGameObject.GetComponent<Projectile>();
+
+            // Copy all serializable fields
+            newProjectile.Speed = Speed;
+            newProjectile.Lifetime = Lifetime;
+            newProjectile.Damage = Damage;
+            newProjectile.Aggressor = Aggressor;
+            newProjectile.HitEffect = HitEffect;
+
+            // Copy the movement action
+            newProjectile.MovementAction = MovementAction;
+
+            return newProjectile;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -52,6 +85,11 @@ namespace Project._Scripts.Entities.Combat
                 EventBus.Publish(new Events.EntityDamaged(impact, collision.gameObject, Damage));
                 EventBus.Publish(new Events.EntityDamaged(impact, collision.gameObject, Damage), collision.gameObject.Id());
             }
+
+            var pos = transform.position + new Vector3(0, 0, -1);
+            var rot = Quaternion.identity;
+            var effect = Instantiate(HitEffect, pos, rot);
+            effect.Play();
 
             Destroy(gameObject);
         }
